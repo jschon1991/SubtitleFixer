@@ -1,15 +1,17 @@
 package MainGui;
 
+import javax.swing.*;
+
 /**
  * Class for starting GUI.
  * @author jschon
  */
-public class GUIStarter {
+class GUIStarter {
 
-    public static void main(final String[] args){
+     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable(){
         public void run(){
-                Window menu = new Menu();
+                Menu menu = new Menu();
                 menu.show();
             }
         });

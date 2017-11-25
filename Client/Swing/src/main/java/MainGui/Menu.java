@@ -1,8 +1,11 @@
 package MainGui;
 
-import javax.swing.Box;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import SubtitleFixerCore.*;
+import java.io.IOException;
 
 /**
  *
@@ -10,7 +13,7 @@ import javax.swing.JPanel;
  * TODO: use locale and resource bundle for text
  * @author jschon
  */
-public class Menu extends JPanel implements ActionListener {
+public class Menu extends JFrame implements ActionListener {
     
     private JButton selectFile;
     private JButton selectFolder;
@@ -21,7 +24,7 @@ public class Menu extends JPanel implements ActionListener {
     private final Dimension horizontalRigidSpace = new Dimension(40, 0);
     private final Dimension verticalRigidSpace = new Dimension(0, 20);
     
-    private SubtitleFixerCore sFC;
+    private final SubtitleFixerCore sFC;
     
     private String sourceLocation;
     
@@ -31,13 +34,21 @@ public class Menu extends JPanel implements ActionListener {
         sFC = new SubtitleFixerCore();
     }
     
+    /**
+     * Set GUI for Subtitle Fixer
+     */
     private void setGUI() {
         this.setLayout(new BorderLayout());
         this.add(Box.createRigidArea(horizontalRigidSpace));
-        this.add(createButtonsArea(), BorderLayout.CENTER));
+        this.add(createButtonsArea(), BorderLayout.CENTER);
         this.add(Box.createRigidArea(horizontalRigidSpace));
     }
     
+    /**
+     * Create Buttons area for GUI.
+     * 
+     * @return Component
+     */
     private Component createButtonsArea() {
         JPanel buttonsArea = new JPanel();
         buttonsArea.setLayout(new BoxLayout(buttonsArea, BoxLayout.PAGE_AXIS));
@@ -51,6 +62,13 @@ public class Menu extends JPanel implements ActionListener {
         return buttonsArea;
     }
     
+    /**
+     * Set button for buttons area with name passed as argument.
+     * 
+     * @param buttonsArea
+     * @param jButton
+     * @param name 
+     */
     private void setButton(JPanel buttonsArea, JButton jButton, String name) {
         jButton = new JButton(name);
         jButton.addActionListener(this);
@@ -59,12 +77,24 @@ public class Menu extends JPanel implements ActionListener {
         buttonsArea.add(Box.createRigidArea(verticalRigidSpace));
     }
     
+    /**
+     * Set button for buttons area with name and enabled switch.
+     * 
+     * @param buttonsArea
+     * @param jButton
+     * @param name
+     * @param enabled 
+     */
     private void setButton(JPanel buttonsArea, JButton jButton, String name, 
             Boolean enabled) {
         setButton(buttonsArea, jButton, name);
         jButton.setEnabled(enabled);
     }
     
+    /**
+     * Set preferences for GUI. <br/>
+     * Exit on close, pack, non resizable, Title and location.
+     */
     private void setPreferences(){
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.pack();
@@ -73,15 +103,28 @@ public class Menu extends JPanel implements ActionListener {
         this.setLocationRelativeTo(null);
     }
     
+    /**
+     * Display gui.
+     */
     public void show(){
         this.setVisible(true);
     }
     
+    /**
+     * Enable/disable selection actions for buttons.
+     * 
+     * @param status 
+     */
     private void enableSelectionAction(Boolean status) {
         doFix.setEnabled(status);
         cleanSelection.setEnabled(status);
     }
     
+    /**
+     * Handle action performed.
+     * 
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         String event = e.getActionCommand();
@@ -92,9 +135,13 @@ public class Menu extends JPanel implements ActionListener {
 //        if(event.equals(exit.getActionCommand()))                   exit();
     }
     
+    /**
+     * Create pop-up for file selection.
+     * Handle file selection.
+     */
     private void selectFile() {
         JFileChooser fileChooser = new JFileChooser();
-        if (fileChooser.showOpenDialog(modalToComponent) == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             sFC.setFile(fileChooser.getSelectedFile());
             enableSelectionAction(true);
         }
@@ -102,6 +149,9 @@ public class Menu extends JPanel implements ActionListener {
         
     }
     
+    /**
+     * Run fix for selection.
+     */
     private void runFix() {
         try {
             sFC.runFix();
@@ -115,9 +165,12 @@ public class Menu extends JPanel implements ActionListener {
         }                          
     }
     
+    /**
+     * Clean selection and disable selection actions.
+     */
     private void cleanSelection() {
         sFC.setFile(null);
-        enableSelectionActions(false);
+        enableSelectionAction(false);
     }
     
 }
