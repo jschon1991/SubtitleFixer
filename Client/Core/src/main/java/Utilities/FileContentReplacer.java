@@ -2,10 +2,13 @@ package Utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,18 +27,12 @@ public class FileContentReplacer {
     
     public FileContentReplacer() {
         replacePairs = new HashMap<String, String>();
-//        replacePairs.put("ø","ř");
-//        replacePairs.put("ï","ď");
-//        replacePairs.put("ì","ě");
-//        replacePairs.put("è","č");
-//        replacePairs.put("ù","ú");
-//        replacePairs.put("ò","ň");
-        replacePairs.put("ø","r");
-        replacePairs.put("ï","d");
-        replacePairs.put("ì","e");
-        replacePairs.put("è","c");
-        replacePairs.put("ù","u");
-        replacePairs.put("ò","n");
+        replacePairs.put("ø","ř");
+        replacePairs.put("ï","ď");
+        replacePairs.put("ì","ě");
+        replacePairs.put("è","č");
+        replacePairs.put("ù","ú");
+        replacePairs.put("ò","ň");
     }
     
     /**
@@ -45,11 +42,14 @@ public class FileContentReplacer {
      */
     public void replaceCharactersInFile(File f) throws IOException {
         File tmpFile = File.createTempFile("buffer", ".tmp");
-        FileWriter fw = new FileWriter(tmpFile);
+        Writer fstream = null;
+           
+        fstream = new OutputStreamWriter(new FileOutputStream(tmpFile), StandardCharsets.UTF_8);
         
-        replaceCharacters(fw, f);
+        replaceCharacters(fstream, f);
         
-        fw.close();
+        fstream.close();
+        
         tmpFile.renameTo(f);
     }
     
@@ -57,19 +57,20 @@ public class FileContentReplacer {
      * Helper method for @replaceCharactersInFile method. <br/>
      * This method will get Reader for file and invoke changing characters 
      * line by line.
-     * @param fw
+     * @param fstream
      * @param f
      * @throws IOException 
      */
-    private void replaceCharacters(FileWriter fw, File f) throws IOException {
-        Reader fr = new FileReader(f);
-        BufferedReader br = new BufferedReader(fr);
+    private void replaceCharacters(Writer fstream, File f) throws IOException {
+//    		InputStreamReader fIStream = new InputStreamReader(new FileInputStream(f), StandardCharsets.ISO_8859_1);
+    		InputStreamReader fIStream = new InputStreamReader(new FileInputStream(f), "Cp1250");
+    		
+    		BufferedReader br = new BufferedReader(fIStream);
         
-        while (br.ready())
-            fw.write(replaceAllRequiredCharacters(br.readLine()) + "\n");
-        
+        while (br.ready()) 
+            fstream.write(replaceAllRequiredCharacters(br.readLine()) + "\n");
+  
         br.close();
-        fr.close();
     }
     
     /**
@@ -79,11 +80,10 @@ public class FileContentReplacer {
      */
     private String replaceAllRequiredCharacters(String line) {
         for (Map.Entry<String, String> replacePair : replacePairs.entrySet()) {
-        		System.out.println("Replacing " + replacePair.getKey() + " with " + replacePair.getValue());
             line = line.replaceAll(replacePair.getKey(), 
                                     	replacePair.getValue());
-//            line = line.replaceAll(replacePair.getKey().toUpperCase(), 
-//                    					replacePair.getValue().toUpperCase());
+            line = line.replaceAll(replacePair.getKey().toUpperCase(), 
+                    					replacePair.getValue().toUpperCase());
         }
         return line;
     }
