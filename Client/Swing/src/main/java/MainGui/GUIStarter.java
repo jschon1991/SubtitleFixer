@@ -11,8 +11,8 @@ class GUIStarter {
      public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable(){
         public void run(){
-                Menu menu = new Menu();
-                menu.show();
+                MainMenu menu = new MainMenu();
+                menu.showMenu();
             }
         });
     }

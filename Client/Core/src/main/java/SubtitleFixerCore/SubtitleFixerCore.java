@@ -64,7 +64,7 @@ public class SubtitleFixerCore {
     
     public void runFix() throws IOException, Exception {
         if (loadedFile != null)
-            if (FileUtilities.isDir(loadedFile)) fixSubtitlesFiles(loadedFile);
+            if (FileUtilities.isDir(loadedFile)) runFixOnDir(loadedFile);
             else if (FileUtilities.isFile(loadedFile)) fixSubtitlesFile(loadedFile);
             else throw new IOException("Unknown type of file: " 
                 + loadedFile.getAbsolutePath() 
@@ -72,4 +72,16 @@ public class SubtitleFixerCore {
         else throw new Exception("File was not loaded!");
     }
     
+    private void runFixOnDir(File dir) throws Exception {
+    		File[] files = dir.listFiles();
+    		String errors = "";
+    		for (File f : files) {
+    			try {
+    				fixSubtitlesFile(f);
+    			} catch(IOException ex) {
+    				errors += ex.getMessage();
+    			}
+    		}
+    		if (errors.length() > 0) throw new Exception(errors);
+    }
 }

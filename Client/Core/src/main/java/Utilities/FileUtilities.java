@@ -17,7 +17,6 @@ public class FileUtilities {
      */
     public static File[] getSrtFromDir(File dir) {
         return dir.listFiles(new FilenameFilter() {
-            @Override
             public boolean accept(File dir, String name) {
                 return name.endsWith(".srt");
             }
@@ -37,14 +36,29 @@ public class FileUtilities {
         return false;
     }
     
+    /**
+     * Loads file from url.
+     * @param url
+     * @return
+     */
     public static File loadDestination(String url) {
         return new File(url);
     }
     
+    /**
+     * Check if file is directory.
+     * @param f
+     * @return
+     */
     public static Boolean isDir(File f) {
         return f.isDirectory();
     }
     
+    /**
+     * Check if file is file(not directory).
+     * @param f
+     * @return
+     */
     public static Boolean isFile(File f) {
         return f.isFile();
     }

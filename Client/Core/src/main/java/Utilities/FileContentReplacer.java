@@ -24,12 +24,18 @@ public class FileContentReplacer {
     
     public FileContentReplacer() {
         replacePairs = new HashMap<String, String>();
-        replacePairs.put("ø","ř");
-        replacePairs.put("ï","ď");
-        replacePairs.put("ì","ě");
-        replacePairs.put("è","č");
-        replacePairs.put("ù","ú");
-        replacePairs.put("ò","ň");
+//        replacePairs.put("ø","ř");
+//        replacePairs.put("ï","ď");
+//        replacePairs.put("ì","ě");
+//        replacePairs.put("è","č");
+//        replacePairs.put("ù","ú");
+//        replacePairs.put("ò","ň");
+        replacePairs.put("ø","r");
+        replacePairs.put("ï","d");
+        replacePairs.put("ì","e");
+        replacePairs.put("è","c");
+        replacePairs.put("ù","u");
+        replacePairs.put("ò","n");
     }
     
     /**
@@ -60,7 +66,7 @@ public class FileContentReplacer {
         BufferedReader br = new BufferedReader(fr);
         
         while (br.ready())
-            fw.write(replaceAllRequiredCharacters(br.readLine()));
+            fw.write(replaceAllRequiredCharacters(br.readLine()) + "\n");
         
         br.close();
         fr.close();
@@ -72,9 +78,13 @@ public class FileContentReplacer {
      * @return 
      */
     private String replaceAllRequiredCharacters(String line) {
-        for (Map.Entry<String, String> replacePair : replacePairs.entrySet())
+        for (Map.Entry<String, String> replacePair : replacePairs.entrySet()) {
+        		System.out.println("Replacing " + replacePair.getKey() + " with " + replacePair.getValue());
             line = line.replaceAll(replacePair.getKey(), 
-                                    replacePair.getValue());
+                                    	replacePair.getValue());
+//            line = line.replaceAll(replacePair.getKey().toUpperCase(), 
+//                    					replacePair.getValue().toUpperCase());
+        }
         return line;
     }
     
