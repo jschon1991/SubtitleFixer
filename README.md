@@ -11,6 +11,3 @@ Settings window
 Multitread core
  - multitread for folder fix run
 
-Fix error msg
- - shorten error msg when multiple errors happen
- - or restyle error msg

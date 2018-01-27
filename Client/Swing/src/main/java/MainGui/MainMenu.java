@@ -180,14 +180,13 @@ public class MainMenu extends JFrame implements ActionListener {
         try {
             sFC.runFix();
             JOptionPane.showMessageDialog(this, "Fix completed");
-            cleanSelection();
         } catch(IOException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
-            cleanSelection();
         } catch(Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
-            cleanSelection();
-        }                          
+        } finally {
+        		cleanSelection();
+        }
     }
     
     /**

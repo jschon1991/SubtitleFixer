@@ -15,6 +15,8 @@ import java.util.logging.Logger;
  */
 public class SubtitleFixerCore {
     
+	private static final int MAX_ERRORS_TO_DISPLAY = 3;
+	
     private final FileContentReplacer fCR;
     
     private File loadedFile;
@@ -75,13 +77,20 @@ public class SubtitleFixerCore {
     private void runFixOnDir(File dir) throws Exception {
     		File[] files = dir.listFiles();
     		String errors = "";
+    		Integer numOfErrors = 0;
     		for (File f : files) {
     			try {
     				fixSubtitlesFile(f);
     			} catch(IOException ex) {
-    				errors += ex.getMessage();
+    				if(numOfErrors < MAX_ERRORS_TO_DISPLAY) {
+    					if(numOfErrors > 0) errors += "\n";
+    					errors += ex.getMessage();
+    				}
+    				numOfErrors++;
     			}
     		}
-    		if (errors.length() > 0) throw new Exception(errors);
+    		if(numOfErrors > MAX_ERRORS_TO_DISPLAY) 
+    			errors += "\nand " + (numOfErrors - MAX_ERRORS_TO_DISPLAY) + " more errors.";
+    		if(numOfErrors > 0) throw new Exception(errors);
     }
 }

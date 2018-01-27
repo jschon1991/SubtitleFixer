@@ -24,7 +24,6 @@ public class FileContentReplacer {
     
     private final Map<String, String> replacePairs;
     
-    
     public FileContentReplacer() {
         replacePairs = new HashMap<String, String>();
         replacePairs.put("ø","ř");
@@ -49,8 +48,11 @@ public class FileContentReplacer {
         replaceCharacters(fstream, f);
         
         fstream.close();
-        
-        tmpFile.renameTo(f);
+        //TODO: switch based on settings.
+        if (false) {
+        		File newFile = new File(f.getAbsolutePath() + "FIX_" + f.getName());
+        		tmpFile.renameTo(newFile);
+        } else tmpFile.renameTo(f);
     }
     
     /**
